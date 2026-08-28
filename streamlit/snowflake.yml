@@ -1,0 +1,15 @@
+definition_version: 2
+entities:
+  customer_360_app:
+    type: streamlit
+    identifier:
+      name: CUSTOMER_360_APP
+      database: INSURANCE_360
+      schema: AI
+    query_warehouse: INSURANCE_360_WH
+    runtime_name: SYSTEM$ST_CONTAINER_RUNTIME_PY3_11
+    compute_pool: SYSTEM_COMPUTE_POOL_CPU
+    main_file: streamlit_app.py
+    artifacts:
+      - streamlit_app.py
+      - pyproject.toml

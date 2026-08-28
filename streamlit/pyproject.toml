@@ -1,0 +1,8 @@
+[project]
+name = "customer-360-app"
+version = "0.1.0"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "streamlit>=1.50.0",
+    "snowflake-snowpark-python",
+]

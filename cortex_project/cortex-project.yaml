@@ -1,0 +1,7 @@
+version: 1
+artifacts:
+  - path: CUSTOMER_360_MODEL.sv.yaml
+    type: semantic_view
+    targets:
+      default:
+        object: INSURANCE_360.AI.CUSTOMER_360_MODEL

@@ -1,0 +1,389 @@
+name: CUSTOMER_360_MODEL
+description: "Unified 360-degree view of insurance customers, their policies, claims,\
+  \ and payment history for personalization, underwriting, and churn analysis."
+tables:
+  - name: CLAIMS
+    base_table:
+      database: INSURANCE_360
+      schema: RAW
+      table: CLAIMS
+    dimensions:
+      - name: CLAIM_ID
+        expr: CLAIM_ID
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: CLAIM_TYPE
+        expr: CLAIM_TYPE
+        data_type: VARCHAR(20)
+        access_modifier: public_access
+      - name: CUSTOMER_ID
+        expr: CUSTOMER_ID
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: POLICY_ID
+        expr: POLICY_ID
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: RESOLUTION_DAYS
+        expr: RESOLUTION_DAYS
+        data_type: "NUMBER(2,0)"
+        access_modifier: public_access
+      - name: STATUS
+        expr: STATUS
+        data_type: VARCHAR(12)
+        access_modifier: public_access
+    facts:
+      - name: CLAIM_AMOUNT
+        expr: CLAIM_AMOUNT
+        data_type: "NUMBER(13,2)"
+        access_modifier: public_access
+    metrics:
+      - name: CLAIM_COUNT
+        description: Number of claims
+        expr: COUNT(CLAIM_ID)
+        access_modifier: public_access
+      - name: TOTAL_CLAIM_AMOUNT
+        description: Total claim amount
+        expr: SUM(CLAIM_AMOUNT)
+        access_modifier: public_access
+    time_dimensions:
+      - name: CLAIM_DATE
+        expr: CLAIM_DATE
+        data_type: DATE
+        access_modifier: public_access
+  - name: CUSTOMERS
+    base_table:
+      database: INSURANCE_360
+      schema: RAW
+      table: CUSTOMERS
+    primary_key:
+      columns:
+        - CUSTOMER_ID
+    dimensions:
+      - name: CHANNEL_ACQUIRED
+        expr: CHANNEL_ACQUIRED
+        data_type: VARCHAR(11)
+        access_modifier: public_access
+      - name: CITY
+        expr: CITY
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: CREDIT_SCORE_BAND
+        expr: CREDIT_SCORE_BAND
+        data_type: VARCHAR(16)
+        access_modifier: public_access
+      - name: CUSTOMER_ID
+        expr: CUSTOMER_ID
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: CUSTOMER_SEGMENT
+        expr: CUSTOMER_SEGMENT
+        data_type: VARCHAR(10)
+        access_modifier: public_access
+      - name: EMAIL
+        expr: EMAIL
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: FIRST_NAME
+        expr: FIRST_NAME
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: GENDER
+        expr: GENDER
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: HOUSEHOLD_INCOME_BAND
+        expr: HOUSEHOLD_INCOME_BAND
+        data_type: VARCHAR(11)
+        access_modifier: public_access
+      - name: LAST_NAME
+        expr: LAST_NAME
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: MARITAL_STATUS
+        expr: MARITAL_STATUS
+        data_type: VARCHAR(8)
+        access_modifier: public_access
+      - name: PHONE
+        expr: PHONE
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: STATE
+        expr: STATE
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: ZIP
+        expr: ZIP
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+    time_dimensions:
+      - name: CUSTOMER_SINCE
+        expr: CUSTOMER_SINCE
+        data_type: DATE
+        access_modifier: public_access
+      - name: DATE_OF_BIRTH
+        expr: DATE_OF_BIRTH
+        data_type: DATE
+        access_modifier: public_access
+  - name: PAYMENTS
+    base_table:
+      database: INSURANCE_360
+      schema: RAW
+      table: PAYMENTS
+    dimensions:
+      - name: CUSTOMER_ID
+        expr: CUSTOMER_ID
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: PAYMENT_ID
+        expr: PAYMENT_ID
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: PAYMENT_METHOD
+        expr: PAYMENT_METHOD
+        data_type: VARCHAR(13)
+        access_modifier: public_access
+      - name: POLICY_ID
+        expr: POLICY_ID
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: STATUS
+        expr: STATUS
+        data_type: VARCHAR(6)
+        access_modifier: public_access
+    facts:
+      - name: AMOUNT
+        expr: AMOUNT
+        data_type: "NUMBER(19,2)"
+        access_modifier: public_access
+    metrics:
+      - name: MISSED_PAYMENT_COUNT
+        description: Number of missed payments
+        expr: COUNT_IF(STATUS = 'Missed')
+        access_modifier: public_access
+    time_dimensions:
+      - name: DUE_DATE
+        expr: DUE_DATE
+        data_type: DATE
+        access_modifier: public_access
+      - name: PAID_DATE
+        expr: PAID_DATE
+        data_type: DATE
+        access_modifier: public_access
+  - name: POLICIES
+    base_table:
+      database: INSURANCE_360
+      schema: RAW
+      table: POLICIES
+    primary_key:
+      columns:
+        - POLICY_ID
+    dimensions:
+      - name: COVERAGE_AMOUNT
+        expr: COVERAGE_AMOUNT
+        data_type: "NUMBER(6,0)"
+        access_modifier: public_access
+      - name: CUSTOMER_ID
+        expr: CUSTOMER_ID
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: CUSTOMER_SEGMENT
+        expr: CUSTOMER_SEGMENT
+        data_type: VARCHAR(10)
+        access_modifier: public_access
+      - name: DEDUCTIBLE
+        expr: DEDUCTIBLE
+        data_type: "NUMBER(4,0)"
+        access_modifier: public_access
+      - name: LINE_OF_BUSINESS
+        expr: LINE_OF_BUSINESS
+        data_type: VARCHAR(6)
+        access_modifier: public_access
+      - name: POLICY_ID
+        expr: POLICY_ID
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: POLICY_NUMBER
+        expr: POLICY_NUMBER
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: STATUS
+        expr: STATUS
+        data_type: VARCHAR(15)
+        access_modifier: public_access
+    facts:
+      - name: ANNUAL_PREMIUM
+        expr: ANNUAL_PREMIUM
+        data_type: "NUMBER(12,2)"
+        access_modifier: public_access
+    metrics:
+      - name: POLICY_COUNT
+        description: Number of policies
+        expr: COUNT(POLICY_ID)
+        access_modifier: public_access
+      - name: TOTAL_ANNUAL_PREMIUM
+        description: Total annual premium across policies
+        expr: SUM(ANNUAL_PREMIUM)
+        access_modifier: public_access
+    time_dimensions:
+      - name: EFFECTIVE_DATE
+        expr: EFFECTIVE_DATE
+        data_type: DATE
+        access_modifier: public_access
+      - name: RENEWAL_DATE
+        expr: RENEWAL_DATE
+        data_type: DATE
+        access_modifier: public_access
+  - name: CUSTOMER_METRICS_SUMMARY
+    description: Pre-aggregated per-customer rollup metrics (premium, policy/claim/payment
+      counts, latest churn risk and sentiment) refreshed incrementally as new interactions
+      and policy/claim/payment data arrive.
+    base_table:
+      database: INSURANCE_360
+      schema: CURATED
+      table: CUSTOMER_METRICS_SUMMARY
+    primary_key:
+      columns:
+        - CUSTOMER_ID
+    dimensions:
+      - name: CUSTOMER_ID
+        expr: CUSTOMER_ID
+        data_type: VARCHAR(16777216)
+      - name: LATEST_CHURN_RISK
+        description: Churn risk level from the customer's most recent interaction
+          transcript
+        expr: LATEST_CHURN_RISK
+        data_type: VARCHAR(16777216)
+      - name: LATEST_SENTIMENT
+        description: Overall sentiment from the customer's most recent interaction
+          transcript
+        expr: LATEST_SENTIMENT
+        data_type: VARCHAR(16777216)
+      - name: NEXT_BEST_ACTION
+        description: AI-recommended next best action for the relationship manager
+          to take with this customer
+        expr: NEXT_BEST_ACTION
+        data_type: VARCHAR(16777216)
+      - name: NBA_RATIONALE
+        description: One-sentence rationale grounding the recommended next best
+          action
+        expr: NBA_RATIONALE
+        data_type: VARCHAR(16777216)
+    facts:
+      - name: ROLLUP_TOTAL_ANNUAL_PREMIUM
+        description: Pre-aggregated total annual premium across this customer's active
+          policies
+        expr: TOTAL_ANNUAL_PREMIUM
+        data_type: NUMBER(24,2)
+      - name: ROLLUP_ACTIVE_POLICY_COUNT
+        description: Pre-aggregated count of this customer's active policies
+        expr: ACTIVE_POLICY_COUNT
+        data_type: NUMBER(18,0)
+      - name: ROLLUP_CLAIM_COUNT
+        description: Pre-aggregated count of this customer's claims
+        expr: CLAIM_COUNT
+        data_type: NUMBER(18,0)
+      - name: ROLLUP_TOTAL_CLAIM_AMOUNT
+        description: Pre-aggregated total claim amount for this customer
+        expr: TOTAL_CLAIM_AMOUNT
+        data_type: NUMBER(25,2)
+      - name: ROLLUP_MISSED_PAYMENT_COUNT
+        description: Pre-aggregated count of missed payments for this customer
+        expr: MISSED_PAYMENT_COUNT
+        data_type: NUMBER(18,0)
+      - name: REVENUE_AT_RISK
+        description: Estimated annual premium revenue at risk of churn for this customer
+        expr: REVENUE_AT_RISK
+        data_type: NUMBER(24,2)
+      - name: PRIORITY_SCORE
+        description: Composite score (churn risk, premium value, missed payments,
+          claims) used to rank customers needing attention
+        expr: PRIORITY_SCORE
+        data_type: NUMBER(10,1)
+    metrics:
+      - name: CUSTOMER_COUNT_BY_CHURN_RISK
+        description: Number of customers, typically grouped by latest churn risk level
+        expr: COUNT(CUSTOMER_ID)
+      - name: TOTAL_REVENUE_AT_RISK
+        description: Total annual premium revenue at risk of churn across customers
+        expr: SUM(REVENUE_AT_RISK)
+relationships:
+  - name: CLAIMS_TO_CUSTOMERS
+    left_table: CLAIMS
+    right_table: CUSTOMERS
+    relationship_columns:
+      - left_column: CUSTOMER_ID
+        right_column: CUSTOMER_ID
+    relationship_type: many_to_one
+    join_type: inner
+  - name: CLAIMS_TO_POLICIES
+    left_table: CLAIMS
+    right_table: POLICIES
+    relationship_columns:
+      - left_column: POLICY_ID
+        right_column: POLICY_ID
+    join_type: inner
+  - name: PAYMENTS_TO_CUSTOMERS
+    left_table: PAYMENTS
+    right_table: CUSTOMERS
+    relationship_columns:
+      - left_column: CUSTOMER_ID
+        right_column: CUSTOMER_ID
+    join_type: inner
+  - name: PAYMENTS_TO_POLICIES
+    left_table: PAYMENTS
+    right_table: POLICIES
+    relationship_columns:
+      - left_column: POLICY_ID
+        right_column: POLICY_ID
+    join_type: inner
+  - name: POLICIES_TO_CUSTOMERS
+    left_table: POLICIES
+    right_table: CUSTOMERS
+    relationship_columns:
+      - left_column: CUSTOMER_ID
+        right_column: CUSTOMER_ID
+    join_type: inner
+  - name: METRICS_SUMMARY_TO_CUSTOMERS
+    left_table: CUSTOMER_METRICS_SUMMARY
+    right_table: CUSTOMERS
+    join_type: inner
+    relationship_columns:
+      - left_column: CUSTOMER_ID
+        right_column: CUSTOMER_ID
+verified_queries:
+  - name: '"0;1"'
+    sql: SELECT COUNT(*) FROM policies WHERE STATUS = 'Active'
+    question: How many active policies are there?
+    verified_at: 1787058433
+    verified_by: Semantic Model Generator
+    use_as_onboarding_question: false
+  - name: '"1;1"'
+    sql: "SELECT LINE_OF_BUSINESS, SUM(ANNUAL_PREMIUM) AS TOTAL_PREMIUM FROM policies\
+      \ GROUP BY LINE_OF_BUSINESS ORDER BY TOTAL_PREMIUM DESC"
+    question: What is the total annual premium by line of business?
+    verified_at: 1787058433
+    verified_by: Semantic Model Generator
+    use_as_onboarding_question: false
+  - name: '"2;1"'
+    sql: "SELECT c.CUSTOMER_ID, c.FIRST_NAME, c.LAST_NAME, COUNT(cl.CLAIM_ID) AS NUM_CLAIMS\
+      \ FROM customers AS c JOIN claims AS cl ON cl.CUSTOMER_ID = c.CUSTOMER_ID GROUP\
+      \ BY 1, 2, 3 ORDER BY NUM_CLAIMS DESC LIMIT 10"
+    question: Which customers have the most claims?
+    verified_at: 1787058433
+    verified_by: Semantic Model Generator
+    use_as_onboarding_question: false
+  - name: '"3;1"'
+    sql: "SELECT p.CUSTOMER_ID, COUNT(*) AS MISSED_PAYMENTS FROM payments AS p WHERE\
+      \ p.STATUS = 'Missed' GROUP BY 1 ORDER BY MISSED_PAYMENTS DESC LIMIT 10"
+    question: Which customers have the most missed payments?
+    verified_at: 1787058433
+    verified_by: Semantic Model Generator
+    use_as_onboarding_question: false
+  - name: '"4;1"'
+    sql: "SELECT CUSTOMER_SEGMENT, AVG(ANNUAL_PREMIUM) AS AVG_PREMIUM FROM policies\
+      \ GROUP BY CUSTOMER_SEGMENT"
+    question: What is the average annual premium by customer segment?
+    verified_at: 1787058433
+    verified_by: Semantic Model Generator
+    use_as_onboarding_question: false
